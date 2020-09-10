@@ -1,2 +1,7 @@
 target
 /.cache-tests
+.idea
+*.iml
+build
+.local
+*.sc
