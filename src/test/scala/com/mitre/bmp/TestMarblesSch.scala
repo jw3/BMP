@@ -14,31 +14,12 @@ class TestMarblesSch {
   val sch = new ClassPathResource("/com/mitre/bmp/Marbles/MARBLES.BMP.xml")
   val infoset = "/com/mitre/bmp/Marbles/MARBLES.BMP.xml"
 
-  @Test def test_Valid(): Unit = {
-    val res = SchematronResourceXSLT.fromClassPath(schematron())
-    assert(res.isValidSchematron, "schematron is not valid")
+  @Test def test_Valid(): Unit = testBody()
+  @Test def test_OneInvalid(): Unit = testBody("bad0")
+  @Test def test_ManyInvalid(): Unit = testBody("bad1")
 
-    val svrl: SchematronOutputType = res.applySchematronValidationToSVRL(sch)
-    assertNotNull(svrl)
-
-    // todo;; how to inspect svrl?
-    printSvrl(svrl)
-  }
-
-  @Test def test_OneInvalid(): Unit = {
-    val res = SchematronResourceXSLT.fromClassPath(schematron("bad0"))
-    assert(res.isValidSchematron, "schematron is not valid")
-
-    val sch = new ClassPathResource(infoset)
-    val svrl: SchematronOutputType = res.applySchematronValidationToSVRL(sch)
-    assertNotNull(svrl)
-
-    // todo;; how to inspect svrl?
-    printSvrl(svrl)
-  }
-
-  @Test def test_ManyInvalid(): Unit = {
-    val res = SchematronResourceXSLT.fromClassPath(schematron("bad1"))
+  def testBody(name: String = "") = {
+    val res = SchematronResourceXSLT.fromClassPath(schematron(name))
     assert(res.isValidSchematron, "schematron is not valid")
 
     val sch = new ClassPathResource(infoset)
@@ -61,7 +42,7 @@ class TestMarblesSch {
     println(txt)
   }
 
-  def schematron(ext: String = "") = ext match {
+  def schematron(ext: String) = ext match {
     case "" => "/com/mitre/bmp/sch/bmp.xslt"
     case v => s"/com/mitre/bmp/sch/bmp.$ext.xslt"
   }
