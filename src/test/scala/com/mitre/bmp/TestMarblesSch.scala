@@ -1,6 +1,7 @@
 package com.mitre.bmp
 
-import java.io.File
+import java.io.ByteArrayOutputStream
+import java.nio.charset.StandardCharsets
 
 import com.helger.commons.io.resource.ClassPathResource
 import com.helger.schematron.svrl.jaxb.SchematronOutputType
@@ -8,8 +9,6 @@ import com.helger.schematron.svrl.{SVRLMarshaller, SVRLNamespaceContext}
 import com.helger.schematron.xslt.SchematronResourceXSLT
 import org.junit.Assert.assertNotNull
 import org.junit.Test
-
-import scala.io.Source
 
 class TestMarblesSch {
   val sch = new ClassPathResource("/com/mitre/bmp/Marbles/MARBLES.BMP.xml")
@@ -56,9 +55,10 @@ class TestMarblesSch {
     aMarshaller.setFormattedOutput(true)
     aMarshaller.setNamespaceContext(SVRLNamespaceContext.getInstance)
 
-    val tmp = new File("/tmp",  "marbles.svrl")
-    aMarshaller.write(svrl, tmp)
-    Source.fromFile(tmp).getLines().foreach(println)
+    val bos = new ByteArrayOutputStream()
+    aMarshaller.write(svrl, bos)
+    val txt = bos.toString(StandardCharsets.UTF_8)
+    println(txt)
   }
 
   def schematron(ext: String = "") = ext match {
