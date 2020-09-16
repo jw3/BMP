@@ -11,13 +11,13 @@ class TestPureSch {
   import TestPureSch._
 
   @Test def test_Simple(): Unit = {
-    val res = SchematronResourcePure.fromInputStream(new StringInputStream(simple, StandardCharsets.UTF_8))
+    val res = SchematronResourcePure.fromString(simple, StandardCharsets.UTF_8)
     res.validateCompletely(new LoggingPSErrorHandler())
     assert(res.isValidSchematron, "schematron is not valid")
   }
 
   @Test def test_Full() {
-    val res = SchematronResourcePure.fromInputStream(new StringInputStream(full, StandardCharsets.UTF_8))
+    val res = SchematronResourcePure.fromString(full, StandardCharsets.UTF_8)
     res.validateCompletely(new LoggingPSErrorHandler())
     assert(res.isValidSchematron, "schematron is not valid")
 
